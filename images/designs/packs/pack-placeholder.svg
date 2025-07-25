@@ -1,0 +1,47 @@
+<svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="packGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#27ae60;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2ecc71;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#packGrad)"/>
+  
+  <!-- Decorative border -->
+  <rect x="15" y="15" width="370" height="370" fill="none" stroke="white" stroke-width="3" stroke-dasharray="15,8"/>
+  
+  <!-- Multiple design icons to represent pack -->
+  <g transform="translate(120, 120)">
+    <rect x="0" y="0" width="50" height="50" fill="white" opacity="0.9" rx="5"/>
+    <rect x="5" y="5" width="40" height="40" fill="#27ae60" rx="3"/>
+    <circle cx="25" cy="25" r="8" fill="white"/>
+  </g>
+  
+  <g transform="translate(230, 120)">
+    <rect x="0" y="0" width="50" height="50" fill="white" opacity="0.9" rx="5"/>
+    <rect x="5" y="5" width="40" height="40" fill="#27ae60" rx="3"/>
+    <polygon points="25,15 35,35 15,35" fill="white"/>
+  </g>
+  
+  <g transform="translate(120, 230)">
+    <rect x="0" y="0" width="50" height="50" fill="white" opacity="0.9" rx="5"/>
+    <rect x="5" y="5" width="40" height="40" fill="#27ae60" rx="3"/>
+    <rect x="15" y="15" width="20" height="20" fill="white" rx="2"/>
+  </g>
+  
+  <g transform="translate(230, 230)">
+    <rect x="0" y="0" width="50" height="50" fill="white" opacity="0.9" rx="5"/>
+    <rect x="5" y="5" width="40" height="40" fill="#27ae60" rx="3"/>
+    <path d="M15 25 L25 15 L35 25 L25 35 Z" fill="white"/>
+  </g>
+  
+  <!-- Center text -->
+  <text x="200" y="340" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="28" font-weight="bold">PACK</text>
+  <text x="200" y="370" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18">MÚLTIPLES DISEÑOS</text>
+  
+  <!-- Pack indicator -->
+  <circle cx="350" cy="50" r="25" fill="#e74c3c"/>
+  <text x="350" y="58" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">PACK</text>
+</svg>
