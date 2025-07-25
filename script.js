@@ -6,6 +6,8 @@ const products = [
         price: 5.99,
         description: "Una elegante corona floral perfecta para personalizar toallas, almohadas y ropa. Una opción clásica para regalos.",
         category: "florales",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".PES", ".DST", ".JEF", ".EXP"]
     },
     {
@@ -14,6 +16,8 @@ const products = [
         price: 4.50,
         description: "Una versión moderna y geométrica de un animal del bosque. Ideal para decoración del hogar contemporánea o ropa con estilo.",
         category: "animales",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".PES", ".DST"]
     },
     {
@@ -22,6 +26,8 @@ const products = [
         price: 7.00,
         description: "Un hermoso y artístico diseño de colibrí con efecto acuarela. Requiere una cuidadosa mezcla de colores.",
         category: "florales",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".PES", ".JEF", ".VP3"]
     },
     {
@@ -30,6 +36,8 @@ const products = [
         price: 5.50,
         description: "Un delicado y romántico diseño de rosa, perfecto para añadir un toque de encanto vintage a mantelería y ropa de cama.",
         category: "florales",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".DST", ".JEF"]
     },
     {
@@ -38,6 +46,8 @@ const products = [
         price: 6.50,
         description: "Un divertido y juguetón conjunto de tres dinosaurios de dibujos animados. Genial para ropa de niños, mochilas y decoración de dormitorios.",
         category: "infantiles",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".PES", ".DST", ".HUS"]
     },
     {
@@ -46,6 +56,8 @@ const products = [
         price: 8.99,
         description: "Un complejo y meditativo patrón de mandala. Excelente para grandes paneles traseros en chaquetas o como una pieza de arte enmarcada.",
         category: "abstractos",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".PES", ".DST", ".EXP"]
     },
     {
@@ -54,6 +66,8 @@ const products = [
         price: 5.25,
         description: "Captura la tranquilidad del mar con este sereno diseño de velero. Perfecto para decoración de casas de playa.",
         category: "nauticos",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".JEF", ".PES", ".VP3"]
     },
     {
@@ -62,7 +76,49 @@ const products = [
         price: 3.99,
         description: "¡Pero primero, café! Un diseño peculiar y divertido para los entusiastas del café. Ideal para delantales o toallas de cocina.",
         category: "logos",
+        type: "individual",
+        image: "images/designs/individual/placeholder.svg",
         formats: [".DST", ".PES"]
+    },
+    // Packs de diseños
+    {
+        id: 9,
+        title: "Pack Jardín Floral (5 diseños)",
+        price: 19.99,
+        originalPrice: 29.95,
+        description: "Colección completa de 5 diseños florales: rosas, tulipanes, girasoles, margaritas y lirios. Perfecto para proyectos de decoración del hogar.",
+        category: "florales",
+        type: "pack",
+        image: "images/designs/packs/pack-placeholder.svg",
+        designCount: 5,
+        savings: "33% de descuento",
+        formats: [".PES", ".DST", ".JEF", ".EXP", ".VP3"]
+    },
+    {
+        id: 10,
+        title: "Pack Safari Infantil (4 diseños)",
+        price: 15.99,
+        originalPrice: 22.00,
+        description: "Adorable colección de animales del safari: león, elefante, jirafa y zebra. Ideal para ropa y accesorios infantiles.",
+        category: "infantiles",
+        type: "pack",
+        image: "images/designs/packs/pack-placeholder.svg",
+        designCount: 4,
+        savings: "27% de descuento",
+        formats: [".PES", ".DST", ".HUS"]
+    },
+    {
+        id: 11,
+        title: "Pack Náutico Completo (6 diseños)",
+        price: 24.99,
+        originalPrice: 36.50,
+        description: "Colección marina con ancla, timón, faro, velero, brújula y pez. Perfecto para decoración costera y ropa de verano.",
+        category: "nauticos",
+        type: "pack",
+        image: "images/designs/packs/pack-placeholder.svg",
+        designCount: 6,
+        savings: "32% de descuento",
+        formats: [".JEF", ".PES", ".VP3", ".DST"]
     }
 ];
 
@@ -167,13 +223,20 @@ function setupEventListeners() {
     // Filter buttons
     filterButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterButtons.forEach(b => b.classList.remove('active'));
+            const filterType = this.getAttribute('data-type');
+            const filter = this.getAttribute('data-filter');
+            
+            // Remove active class from buttons of the same type
+            if (filterType === 'type') {
+                document.querySelectorAll('.type-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            } else if (filterType === 'category') {
+                document.querySelectorAll('.category-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            }
+            
             // Add active class to clicked button
             this.classList.add('active');
             
-            const filter = this.getAttribute('data-filter');
-            handleFilter(filter);
+            handleFilter();
         });
     });
     
@@ -403,14 +466,39 @@ function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.setAttribute('data-category', product.category);
+    card.setAttribute('data-type', product.type);
+    
+    // Crear el contenido específico según el tipo
+    const typeIndicator = product.type === 'pack' ? 
+        `<div class="pack-indicator">
+            <i class="fas fa-layer-group"></i>
+            <span>PACK - ${product.designCount} diseños</span>
+        </div>` : 
+        `<div class="individual-indicator">
+            <i class="fas fa-star"></i>
+            <span>DISEÑO INDIVIDUAL</span>
+        </div>`;
+    
+    const priceSection = product.type === 'pack' && product.originalPrice ? 
+        `<div class="product-price">
+            <span class="current-price">$${product.price.toFixed(2)}</span>
+            <span class="original-price">$${product.originalPrice.toFixed(2)}</span>
+            <span class="savings">${product.savings}</span>
+        </div>` :
+        `<div class="product-price">$${product.price.toFixed(2)}</div>`;
     
     card.innerHTML = `
         <div class="product-image">
-            400 x 400
+            <img src="${product.image}" alt="${product.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="image-placeholder" style="display: none;">
+                <i class="fas fa-image"></i>
+                <span>Imagen próximamente</span>
+            </div>
+            ${typeIndicator}
         </div>
         <div class="product-info">
             <h3 class="product-title">${product.title}</h3>
-            <div class="product-price">$${product.price.toFixed(2)}</div>
+            ${priceSection}
             <p class="product-description">${product.description}</p>
             <div class="product-formats">
                 ${product.formats.map(format => `<span class="format-tag">${format}</span>`).join('')}
@@ -576,36 +664,27 @@ function renderCart() {
 
 // Handle search
 function handleSearch() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
-    
-    let filteredProducts = products;
-    
-    // Apply category filter first
-    if (activeFilter !== 'all') {
-        filteredProducts = filteredProducts.filter(product => product.category === activeFilter);
-    }
-    
-    // Apply search filter
-    if (searchTerm) {
-        filteredProducts = filteredProducts.filter(product => 
-            product.title.toLowerCase().includes(searchTerm) ||
-            product.description.toLowerCase().includes(searchTerm)
-        );
-    }
-    
-    renderProducts(filteredProducts);
+    handleFilter();
 }
 
-// Handle category filter
-function handleFilter(category) {
+// Handle filters
+function handleFilter() {
     const searchTerm = searchInput.value.toLowerCase();
+    
+    // Get active filters
+    const activeTypeFilter = document.querySelector('.type-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
+    const activeCategoryFilter = document.querySelector('.category-filters .filter-btn.active')?.getAttribute('data-filter') || 'all';
     
     let filteredProducts = products;
     
+    // Apply type filter
+    if (activeTypeFilter !== 'all') {
+        filteredProducts = filteredProducts.filter(product => product.type === activeTypeFilter);
+    }
+    
     // Apply category filter
-    if (category !== 'all') {
-        filteredProducts = filteredProducts.filter(product => product.category === category);
+    if (activeCategoryFilter !== 'all') {
+        filteredProducts = filteredProducts.filter(product => product.category === activeCategoryFilter);
     }
     
     // Apply search filter if exists
@@ -617,6 +696,18 @@ function handleFilter(category) {
     }
     
     renderProducts(filteredProducts);
+}
+
+// Function to request custom quote
+function requestCustomQuote() {
+    const message = `¡Hola! Me interesa solicitar una cotización para un diseño de bordado personalizado.\n\nPor favor, me gustaría conocer:\n• Precios para diseños personalizados\n• Tiempo de entrega\n• Proceso de trabajo\n• Formatos disponibles\n\n¡Espero su respuesta para comenzar con mi proyecto!`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappNumber = '+595982906362';
+    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    
+    window.open(whatsappURL, '_blank');
+    showNotification('Redirigiendo a WhatsApp para cotización personalizada...', 'info');
 }
 
 // Smooth scrolling for navigation

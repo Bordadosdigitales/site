@@ -56,19 +56,87 @@
             </div>
 
             <!-- Filter Buttons -->
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">Todos</button>
-                <button class="filter-btn" data-filter="florales">Florales</button>
-                <button class="filter-btn" data-filter="animales">Animales</button>
-                <button class="filter-btn" data-filter="infantiles">Infantiles</button>
-                <button class="filter-btn" data-filter="abstractos">Abstractos</button>
-                <button class="filter-btn" data-filter="nauticos">Náuticos</button>
-                <button class="filter-btn" data-filter="logos">Logos</button>
+            <div class="filter-section">
+                <div class="filter-group">
+                    <h4>Por Tipo:</h4>
+                    <div class="filter-buttons type-filters">
+                        <button class="filter-btn active" data-filter="all" data-type="type">Todos</button>
+                        <button class="filter-btn" data-filter="individual" data-type="type">Diseños Individuales</button>
+                        <button class="filter-btn" data-filter="pack" data-type="type">Packs de Diseños</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Por Categoría:</h4>
+                    <div class="filter-buttons category-filters">
+                        <button class="filter-btn active" data-filter="all" data-type="category">Todas</button>
+                        <button class="filter-btn" data-filter="florales" data-type="category">Florales</button>
+                        <button class="filter-btn" data-filter="animales" data-type="category">Animales</button>
+                        <button class="filter-btn" data-filter="infantiles" data-type="category">Infantiles</button>
+                        <button class="filter-btn" data-filter="abstractos" data-type="category">Abstractos</button>
+                        <button class="filter-btn" data-filter="nauticos" data-type="category">Náuticos</button>
+                        <button class="filter-btn" data-filter="logos" data-type="category">Logos</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Products Grid -->
             <div class="products-grid" id="productsGrid">
                 <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Designs Section -->
+    <section class="custom-designs-section">
+        <div class="container">
+            <div class="custom-designs-content">
+                <div class="custom-designs-text">
+                    <h2>¿Necesitas un Diseño Personalizado?</h2>
+                    <p>¡Creamos diseños únicos especialmente para ti! Si tienes una idea específica o necesitas algo que no encuentras en nuestro catálogo, nuestro equipo de diseñadores puede crear el bordado perfecto para tu proyecto.</p>
+                    
+                    <div class="custom-features">
+                        <div class="feature">
+                            <i class="fas fa-palette"></i>
+                            <div>
+                                <h4>Diseño Único</h4>
+                                <p>Creamos desde cero según tus especificaciones</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Entrega Rápida</h4>
+                                <p>Tiempo de entrega de 3-5 días hábiles</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-redo"></i>
+                            <div>
+                                <h4>Revisiones Incluidas</h4>
+                                <p>Hasta 2 revisiones sin costo adicional</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-file-alt"></i>
+                            <div>
+                                <h4>Todos los Formatos</h4>
+                                <p>Entregamos en todos los formatos disponibles</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="custom-quote-btn" onclick="requestCustomQuote()">
+                        <i class="fab fa-whatsapp"></i>
+                        Solicitar Cotización Personalizada
+                    </button>
+                </div>
+                <div class="custom-designs-image">
+                    <div class="custom-placeholder">
+                        <i class="fas fa-drafting-compass"></i>
+                        <h3>Diseños a Medida</h3>
+                        <p>Tu imaginación es el límite</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -150,6 +218,7 @@
                     <button class="continue-shopping" id="continueShopping">Seguir Comprando</button>
                 </div>
             </div>
+            
         </div>
     </div>
 
