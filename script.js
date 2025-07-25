@@ -158,6 +158,21 @@ const searchInput = document.getElementById('searchInput');
 const filterButtons = document.querySelectorAll('.filter-btn');
 const ctaBtn = document.querySelector('.cta-btn');
 
+// Theme toggle elements
+const themeToggle = document.getElementById('themeToggle');
+
+// Preview modal elements
+const previewModal = document.getElementById('previewModal');
+const closePreview = document.getElementById('closePreview');
+const previewImage = document.getElementById('previewImage');
+const previewPlaceholder = document.getElementById('previewPlaceholder');
+const previewTitle = document.getElementById('previewTitle');
+const previewProductTitle = document.getElementById('previewProductTitle');
+const previewProductDescription = document.getElementById('previewProductDescription');
+const previewPrice = document.getElementById('previewPrice');
+const previewFormats = document.getElementById('previewFormats');
+const previewAddCart = document.getElementById('previewAddCart');
+
 // Auth elements
 const loginBtn = document.getElementById('loginBtn');
 const registerBtn = document.getElementById('registerBtn');
@@ -173,10 +188,37 @@ const showLogin = document.getElementById('showLogin');
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     loadUserData();
+    loadTheme();
     renderProducts(products);
     updateCartCount();
     setupEventListeners();
 });
+
+// Theme management
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        updateThemeIcon(true);
+    }
+}
+
+function toggleTheme() {
+    const isDark = document.body.classList.toggle('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateThemeIcon(isDark);
+}
+
+function updateThemeIcon(isDark) {
+    const icon = themeToggle.querySelector('i');
+    if (isDark) {
+        icon.className = 'fas fa-sun';
+        themeToggle.title = 'Cambiar a tema claro';
+    } else {
+        icon.className = 'fas fa-moon';
+        themeToggle.title = 'Cambiar a tema oscuro';
+    }
+}
 
 // Setup event listeners
 function setupEventListeners() {
@@ -246,22 +288,36 @@ function setupEventListeners() {
             behavior: 'smooth'
         });
     });
+    
+    // Theme toggle
+    themeToggle.addEventListener('click', toggleTheme);
+    
+    // Preview modal events
+    closePreview.addEventListener('click', closePreviewModal);
+    previewModal.addEventListener('click', function(e) {
+        if (e.target === previewModal) {
+            closePreviewModal();
+        }
+    });
 }
 
 // Auth functions
 function openLoginModal() {
     loginModal.classList.add('active');
+    document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
 }
 
 function openRegisterModal() {
     registerModal.classList.add('active');
+    document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
 }
 
 function closeAuthModals() {
     loginModal.classList.remove('active');
     registerModal.classList.remove('active');
+    document.body.classList.remove('modal-open');
     document.body.style.overflow = 'auto';
     clearAuthForms();
 }
@@ -353,7 +409,14 @@ function updateUserInterface() {
     
     if (currentUser) {
         // User is logged in
+        const isDark = document.body.classList.contains('dark-theme');
+        const themeIcon = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        const themeTitle = isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
+        
         navActions.innerHTML = `
+            <button class="theme-toggle" id="themeToggle" title="${themeTitle}">
+                <i class="${themeIcon}"></i>
+            </button>
             <button class="cart-btn" id="cartBtn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCount">0</span>
@@ -367,7 +430,8 @@ function updateUserInterface() {
             </button>
         `;
         
-        // Re-attach cart event listener
+        // Re-attach event listeners
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('cartBtn').addEventListener('click', openCart);
         
         // Update global references to new elements
@@ -375,7 +439,14 @@ function updateUserInterface() {
         updateCartCount();
     } else {
         // User is not logged in
+        const isDark = document.body.classList.contains('dark-theme');
+        const themeIcon = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        const themeTitle = isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
+        
         navActions.innerHTML = `
+            <button class="theme-toggle" id="themeToggle" title="${themeTitle}">
+                <i class="${themeIcon}"></i>
+            </button>
             <button class="cart-btn" id="cartBtn">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cartCount">0</span>
@@ -390,6 +461,7 @@ function updateUserInterface() {
         `;
         
         // Re-attach event listeners
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('cartBtn').addEventListener('click', openCart);
         document.getElementById('loginBtn').addEventListener('click', openLoginModal);
         document.getElementById('registerBtn').addEventListener('click', openRegisterModal);
@@ -488,7 +560,7 @@ function createProductCard(product) {
         `<div class="product-price">$${product.price.toFixed(2)}</div>`;
     
     card.innerHTML = `
-        <div class="product-image">
+        <div class="product-image" onclick="openPreviewModal(${product.id})" style="cursor: pointer;">
             <img src="${product.image}" alt="${product.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <div class="image-placeholder" style="display: none;">
                 <i class="fas fa-image"></i>
@@ -578,12 +650,14 @@ function showAddToCartAnimation() {
 function openCart() {
     cartModal.classList.add('active');
     renderCart();
+    document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
 }
 
 // Close cart modal
 function closeCartModal() {
     cartModal.classList.remove('active');
+    document.body.classList.remove('modal-open');
     document.body.style.overflow = 'auto';
 }
 
@@ -853,6 +927,7 @@ function showFormatSelection() {
     
     document.body.appendChild(formatModal);
     formatModal.classList.add('active');
+    document.body.classList.add('modal-open');
     document.body.style.overflow = 'hidden';
 }
 
@@ -861,6 +936,7 @@ function closeFormatModal() {
     const formatModal = document.querySelector('.format-modal');
     if (formatModal) {
         formatModal.remove();
+        document.body.classList.remove('modal-open');
         document.body.style.overflow = 'auto';
     }
 }
@@ -934,3 +1010,88 @@ function debounce(func, wait) {
 // Apply debounce to search
 const debouncedSearch = debounce(handleSearch, 300);
 searchInput.addEventListener('input', debouncedSearch);
+
+// Preview Modal Functions
+function openPreviewModal(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const modal = document.getElementById('previewModal');
+    const modalImage = document.getElementById('previewImage');
+    const modalPlaceholder = document.getElementById('previewPlaceholder');
+    const modalTitle = document.getElementById('previewTitle');
+    const modalPrice = document.getElementById('previewPrice');
+    const modalFormats = document.getElementById('previewFormats');
+    
+    // Update modal content with enhanced details
+    modalTitle.textContent = product.title;
+    document.getElementById('previewProductTitle').textContent = product.title;
+    document.getElementById('previewProductDescription').textContent = product.description;
+    modalPrice.textContent = `$${product.price.toFixed(2)}`;
+    modalFormats.textContent = product.formats ? product.formats.join(', ') : 'PES, DST, JEF, EXP, VP3, HUS';
+    
+    // Create unique preview content for each design
+    const previewDetails = getUniquePreviewContent(product);
+    document.getElementById('previewProductDescription').innerHTML = `
+        <p>${product.description}</p>
+        <div class="preview-details">
+            <h4>Detalles del Diseño:</h4>
+            <ul>
+                <li><strong>Dimensiones:</strong> ${previewDetails.dimensions}</li>
+                <li><strong>Puntadas:</strong> ${previewDetails.stitches}</li>
+                <li><strong>Colores:</strong> ${previewDetails.colors}</li>
+            </ul>
+        </div>
+    `;
+    
+    // Handle image loading
+    modalImage.src = product.image;
+    modalImage.onload = function() {
+        modalImage.style.display = 'block';
+        modalPlaceholder.style.display = 'none';
+    };
+    modalImage.onerror = function() {
+        modalImage.style.display = 'none';
+        modalPlaceholder.style.display = 'flex';
+    };
+    
+    // Update add to cart button - ensure it exists before assigning
+    const addToCartBtn = document.getElementById('previewAddCart');
+    if (addToCartBtn) {
+        addToCartBtn.onclick = function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCart(product.id);
+            closePreviewModal();
+        };
+    }
+    
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+}
+
+function getUniquePreviewContent(product) {
+    // Generate unique details based on product characteristics
+    const baseDetails = {
+        dimensions: ['10x10 cm', '15x15 cm', '20x20 cm', '12x18 cm', '8x12 cm'],
+        stitches: ['2,500-3,000', '3,500-4,200', '5,000-6,500', '1,800-2,400', '4,000-5,200'],
+        colors: ['3-4 colores', '5-6 colores', '2-3 colores', '4-5 colores', '6-8 colores']
+    };
+    
+    // Use product ID to generate consistent but unique details
+    const index = product.id % baseDetails.dimensions.length;
+    
+    return {
+        dimensions: baseDetails.dimensions[index],
+        stitches: baseDetails.stitches[index],
+        colors: baseDetails.colors[index]
+    };
+}
+
+function closePreviewModal() {
+    const modal = document.getElementById('previewModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = 'auto';
+}

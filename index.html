@@ -17,6 +17,9 @@
             </div>
             <nav class="nav">
                 <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
                     <button class="cart-btn" id="cartBtn">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" id="cartCount">0</span>
@@ -219,6 +222,44 @@
                 </div>
             </div>
             
+        </div>
+    </div>
+
+    <!-- Design Preview Modal -->
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h3 id="previewTitle">Vista Previa del Diseño</h3>
+                <button class="close-preview" id="closePreview">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="preview-body">
+                <div class="preview-image-container">
+                    <img id="previewImage" src="" alt="Vista previa del diseño">
+                    <div class="preview-placeholder" id="previewPlaceholder">
+                        <i class="fas fa-image"></i>
+                        <span>Vista previa del diseño</span>
+                    </div>
+                </div>
+                <div class="preview-info">
+                    <div class="preview-details">
+                        <h4 id="previewProductTitle"></h4>
+                        <p id="previewProductDescription"></p>
+                        <div class="preview-price" id="previewPrice"></div>
+                        <div class="preview-formats" id="previewFormats"></div>
+                    </div>
+                    <div class="preview-actions">
+                        <button class="preview-add-cart" id="previewAddCart">
+                            <i class="fas fa-shopping-cart"></i>
+                            Añadir al Carrito
+                        </button>
+                        <button class="preview-close" onclick="closePreviewModal()">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
